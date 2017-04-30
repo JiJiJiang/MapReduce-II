@@ -1,6 +1,7 @@
 
 /**
  * Created by hadoop on 4/30/17.
+ * 2017st32 游客1704209322
  */
 
 import java.io.IOException;
@@ -54,7 +55,7 @@ public class InvertedIndexer {
                 frequence = new IntWritable(hashmap.get(word));
                 Text fileName_frequence = new Text(fileName + ":" + frequence.toString());
                 context.write(new Text(word), fileName_frequence);
-                //以”fish  doc1@1“ 的格式输出
+                //以”fish  doc1:1“ 的格式输出
             }
 
         }
@@ -72,11 +73,11 @@ public class InvertedIndexer {
             for (Text val : values) {
 
                 s = val.toString();
-                //fileName=s.substring(0, val.find("@"));
-                //num=s.substring(val.find("@")+1, val.getLength());
+                //fileName=s.substring(0, val.find(":"));
+                //num=s.substring(val.find(":")+1, val.getLength());
                 fileName = s.substring(0, s.indexOf(':'));
                 num = s.substring(s.indexOf(':') + 1, s.length());
-                //提取“doc1@1”中‘@’后面的词频
+                //提取“doc1:1”中‘:’后面的词频
                 sum += Integer.parseInt(num);
             }
             IntWritable frequence = new IntWritable(sum);
@@ -109,7 +110,7 @@ public class InvertedIndexer {
             avg = total/fileNum;
             all.insert(0, avg+",");
             context.write(key, new Text(all.toString()));
-        } //最终输出键值对示例：(“fish", “doc1@0; doc1@8;doc2@0;doc2@8 ")
+        } //最终输出键值对示例：(“fish", “doc1:0; doc1:8;doc2:0;doc2:8 ")
     }
 
     public static void main(String[] args) {
